@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class QuoteHotel extends Model
 {
+    use LogsActivity;
     protected $fillable = [
         'quote_id',
         'hotel_name',

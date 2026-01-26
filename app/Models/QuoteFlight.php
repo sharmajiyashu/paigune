@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class QuoteFlight extends Model
 {
+    use LogsActivity;
     protected $fillable = [
         'quote_id',
 

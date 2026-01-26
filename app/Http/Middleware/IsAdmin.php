@@ -16,6 +16,6 @@ class IsAdmin
             return $next($request);
         }
 
-        return redirect()->route('login')->with('error', 'Access denied. Admin or Agent only.');
+        return redirect()->route('admin.login')->with('error', 'Access denied. Admin or Agent only.');
     }
 }

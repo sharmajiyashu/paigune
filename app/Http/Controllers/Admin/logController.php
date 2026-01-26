@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
 class logController extends Controller
@@ -12,7 +13,8 @@ class logController extends Controller
      */
     public function index()
     {
-        //
+        $logs = ActivityLog::latest()->paginate(50);
+        return view('admin.logs.index',compact('logs'));
     }
 
     /**
