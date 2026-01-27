@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
-class logController extends Controller
+class LogController extends Controller
 {
     /**
      * Display a listing of the resource.
