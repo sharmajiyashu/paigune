@@ -13,7 +13,7 @@
     <meta name="author" content="PIXINVENT">
     <title>Login Page - {{ env('APP_NAME') }}</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{ url('public/dashboard-assets/logo.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url('public/favicon.ico') }}">
 
     <link rel="apple-touch-icon" href="{{ url('public/dashboard-assets/app-assets/images/ico/apple-icon-120.png') }}">
     {{-- <link rel="shortcut icon" type="image/x-icon" href="{{ url('public/dashboard-assets/app-assets/images/ico/favicon.ico')}}"> --}}
