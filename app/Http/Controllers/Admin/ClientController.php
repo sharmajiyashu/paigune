@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreClientRequest;
 use App\Http\Requests\Admin\UpdateClientRequest;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class ClientController extends Controller
@@ -52,7 +54,17 @@ class ClientController extends Controller
         $data['role'] = User::$client;
         $data['password'] = Hash::make('123456');
         $data['password_2'] = 123456;
-        User::create($data);
+        $client = User::create($data);
+
+        Notification::create([
+            'type' => 'client',
+            'title' => 'New Client Created',
+            'message' => 'Client ' . $client->name . ' has been added by ' . Auth::user()->name,
+            'from_user_id' => Auth::id(),
+            'to_user_id' => 1, // Admin ID
+            'reference_id' => $client->id
+        ]);
+
         session()->flash('success', 'Client Create Successfully');
     }
 

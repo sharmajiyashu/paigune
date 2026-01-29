@@ -54,6 +54,8 @@
                                                 <th>Reference</th>
                                                 <th>Internal Ref</th>
                                                 <th>Total Price</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
                                                 <th>Created</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
@@ -70,6 +72,18 @@
                                                     <td>{{ $item->reference_number }}</td>
                                                     <td>{{ $item->internal_ref }}</td>
                                                     <td>₹ {{ number_format($item->total_price, 2) }}</td>
+                                                    <td>
+                                                        @if ($item->status === 'pending')
+                                                            <span style="color: #f1c40f; font-weight: 600;">Pending</span>
+                                                        @elseif($item->status === 'rejected')
+                                                            <span style="color: #e74c3c; font-weight: 600;">Rejected</span>
+                                                        @elseif($item->status === 'accepted')
+                                                            <span style="color: #2ecc71; font-weight: 600;">Accepted</span>
+                                                        @else
+                                                            <span>{{ ucfirst($item->status) }}</span>
+                                                        @endif
+                                                    </td>
+                                                     <td>{{ $item->createdBy->name ?? 'System' }}</td>
                                                     <td>{{ $item->created_at->format('d M Y') }}</td>
 
                                                     <td class="text-center">

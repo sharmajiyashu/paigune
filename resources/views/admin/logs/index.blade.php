@@ -26,9 +26,9 @@
                 </div>
 
 
-                <div class="col-md-3" style="text-align: end">
+                {{-- <div class="col-md-3" style="text-align: end">
                     <a href="{{ route('admin.clients.create') }}" class=" btn btn-primary btn-gradient round  ">Create</a>
-                </div>
+                </div> --}}
             </div>
             <div class="content-body">
 

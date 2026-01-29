@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Quote extends Model
 {
     use LogsActivity;
-    protected $fillable = ['client_id', 'reference_number', 'internal_ref', 'total_price', 'notes'];
+    protected $fillable = ['client_id', 'reference_number', 'internal_ref', 'total_price', 'notes', 'created_by'];
 
     public function flight()
     {
@@ -33,5 +33,10 @@ class Quote extends Model
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

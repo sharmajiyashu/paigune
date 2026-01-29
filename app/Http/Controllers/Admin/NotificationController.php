@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -10,10 +11,27 @@ class NotificationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query_search = $request->input('search');
+
+        $notifications = Notification::when($query_search, function ($query) use ($query_search) {
+            $query->where(function ($q) use ($query_search) {
+                $q->where('title', 'like', '%' . $query_search . '%')
+                    ->orWhere('message', 'like', '%' . $query_search . '%')
+                    ->orWhere('type', 'like', '%' . $query_search . '%');
+            });
+        })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        if ($request->ajax()) {
+            return view('admin.notifications.pagination', compact('notifications'))->render();
+        }
+
+        return view('admin.notifications.index', compact('notifications'));
     }
+
 
     /**
      * Show the form for creating a new resource.

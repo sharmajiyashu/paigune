@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreAgentRequest;
 use App\Http\Requests\Admin\UpdateAgentRequest;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AgentController extends Controller
@@ -61,7 +63,16 @@ class AgentController extends Controller
             $data['profile'] = $filename;
         }
 
-        User::create($data);
+        $agent = User::create($data);
+
+        Notification::create([
+            'type' => 'agent',
+            'title' => 'New Agent Added',
+            'message' => 'Agent ' . $agent->name . ' has been added by ' . Auth::user()->name,
+            'from_user_id' => Auth::id(),
+            'to_user_id' => 1, // Admin ID
+            'reference_id' => $agent->id
+        ]);
         session()->flash('success', 'Agent Create Successfully');
     }
 

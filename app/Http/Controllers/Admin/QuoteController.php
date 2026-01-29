@@ -9,6 +9,7 @@ use App\Http\Requests\StoreQuoteOtherRequest;
 use App\Http\Requests\StoreQuoteRequest;
 use App\Http\Requests\StoreQuoteTransportRequest;
 use App\Http\Requests\UpdateQuoteRequest;
+use App\Models\Notification;
 use App\Models\Quote;
 use App\Models\QuoteFlight;
 use App\Models\QuoteHotel;
@@ -16,6 +17,7 @@ use App\Models\QuoteOther;
 use App\Models\QuoteTransport;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QuoteController extends Controller
 {
@@ -44,6 +46,7 @@ class QuoteController extends Controller
             ->paginate(10)
             ->withQueryString(); // keep query params on pagination
 
+
         // Handle AJAX requests for pagination
         if ($request->ajax()) {
             return view('admin.quotes.pagination', compact('quotes'))->render();
@@ -67,7 +70,20 @@ class QuoteController extends Controller
      */
     public function store(StoreQuoteRequest $request)
     {
-        $quote = Quote::create($request->validated());
+        $data = $request->validated();
+        $data['created_by'] = Auth::id();
+        $quote = Quote::create($data);
+
+        Notification::create([
+            'type' => 'quote',
+            'title' => 'New Quote Created',
+            'message' => 'Quote #' . $quote->reference_number . ' has been created.',
+            'from_user_id' => Auth::id(),
+            // 'to_user_id' => $adminId,
+            'reference_id' => $quote->id
+        ]);
+
+
         session()->flash('success', 'Quote Basic Detail Save');
         return route('admin.quotes.flights', $quote->id);
     }
