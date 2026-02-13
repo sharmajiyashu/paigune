@@ -14,6 +14,11 @@ return [
     |
     */
 
+    'flightaware' => [
+        'api_key'  => env('FLIGHTAWARE_API_KEY'),
+        'base_url' => env('FLIGHTAWARE_BASE_URL'),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],
