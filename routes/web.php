@@ -16,17 +16,11 @@ Route::prefix('flightaware')->group(function () {
 
     Route::get('/airport/{icao}', [FlightAwareController::class, 'airport']);
 
-    // Get departures from an airport
     Route::get('/departures/{icao}', [FlightAwareController::class, 'departures']);
 
-    // Get arrivals at an airport
     Route::get('/arrivals/{icao}', [FlightAwareController::class, 'arrivals']);
 
-    // Search flights from origin → destination
     Route::get('/from-to/{from}/{to}', [FlightAwareController::class, 'fromTo']);
-
-    // Get all international departures from VIDP (Delhi)
-    Route::get('/vidp/international', [FlightAwareController::class, 'internationalDeparturesFromVIDP']);
 
     Route::get('/sync-airports', [FlightAwareController::class, 'syncAirports']);
 

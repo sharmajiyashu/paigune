@@ -12,7 +12,7 @@ class FlightAwareService
 
     public function __construct()
     {
-        $this->baseUrl = config('services.flightaware.base_url'); // e.g., https://aeroapi.flightaware.com/aeroapi
+        $this->baseUrl = config('services.flightaware.base_url');
         $this->apiKey  = config('services.flightaware.api_key');
     }
 
@@ -105,13 +105,33 @@ class FlightAwareService
     /**
      * Search flights from origin → destination
      */
-    public function searchFlights(string $from, string $to)
+    public function searchFlights(string $from, string $to, int $howMany = 15, int $offset = 0): array
     {
-        return Cache::remember("fa_flights_{$from}_to_{$to}", now()->addMinutes(30), function () use ($from, $to) {
-            return $this->request('/flights/search', [
-                'origin'      => $from,
-                'destination' => $to,
-            ]);
+        $cacheKey = "fa_flights_{$from}_to_{$to}_{$howMany}_{$offset}";
+
+        return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($from, $to, $howMany, $offset) {
+
+            // GET request with API key in header
+            $response = Http::withHeaders([
+                'x-apikey' => $this->apiKey,
+                'Accept'   => 'application/json',
+            ])
+                ->get($this->baseUrl, [
+                    'origin'      => $from,
+                    'destination' => $to,
+                    'howMany'     => $howMany,
+                    'offset'      => $offset,
+                ]);
+
+            if ($response->failed()) {
+                return [
+                    'error' => true,
+                    'status' => $response->status(),
+                    'message' => $response->body(),
+                ];
+            }
+
+            return $response->json();
         });
     }
 }

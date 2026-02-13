@@ -28,5 +28,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::post('profile', [AuthController::class, 'updateProfile']);
 
-    Route::get('/airpots',[FlightController::class,'airpots']);
+    Route::get('/airports',[FlightController::class,'airports']);
+    Route::get('/arrivals/{icao}',[FlightController::class,'arrivals']);
+    Route::get('/departures/{icao}',[FlightController::class,'departures']);
+    Route::get('/from-to/{from}/{to}', [FlightController::class, 'fromTo']);
+
 });
