@@ -26,9 +26,9 @@ class RouteServiceProvider extends ServiceProvider
             //     ->as('dashboard.') // Add a name prefix for dashboard routes
             //     ->group(base_path('routes/dashboard.php'));
 
-            // Route::middleware('api')
-            //     ->prefix('api')
-            //     ->group(base_path('routes/api.php'));
+            Route::middleware('api')
+                ->prefix('api')
+                ->group(base_path('routes/api.php'));
         });
     }
 }
