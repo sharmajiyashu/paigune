@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FlightController;
 use App\Models\User;
 use Illuminate\Support\Facades\Request;
 
@@ -26,4 +27,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::post('profile', [AuthController::class, 'updateProfile']);
+
+    Route::get('/airpots',[FlightController::class,'airpots']);
 });

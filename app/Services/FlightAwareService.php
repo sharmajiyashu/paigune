@@ -45,27 +45,35 @@ class FlightAwareService
     {
         return Cache::remember('fa_all_airports', now()->addMinutes(30), function () {
             $allAirports = [];
+            $seenCodes = [];
             $nextPage = 1;
 
             do {
                 $response = $this->request('/airports', ['page' => $nextPage, 'max_pages' => 1]);
 
+                return $response;
+
                 if (!empty($response['airports'])) {
                     foreach ($response['airports'] as $airport) {
-                        $allAirports[] = [
-                            'code' => $airport['code'] ?? null,
-                            'info_url' => $airport['airport_info_url'] ?? null
-                        ];
+                        $code = $airport['code'] ?? null;
+
+                        // skip duplicates
+                        if ($code && !in_array($code, $seenCodes)) {
+                            $allAirports[] = [
+                                'code' => $code,
+                                'info_url' => $airport['airport_info_url'] ?? null
+                            ];
+                            $seenCodes[] = $code;
+                        }
                     }
                 }
+
                 $nextPage = isset($response['links']['next']) ? $response['links']['next'] : null;
             } while ($nextPage);
 
             return $allAirports;
         });
     }
-
-
 
     public function getAirport(string $icao)
     {

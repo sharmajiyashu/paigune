@@ -81,7 +81,8 @@ class FlightAwareController extends Controller
         $savedCount = 0;
 
         foreach ($allCodes as $airportSummary) {
-            $icao = $airportSummary['code'] ?? null;
+            // $icao = $airportSummary['code'] ?? null;
+            $icao = $airportSummary ?? null;
 
             if (!$icao) continue;
 
