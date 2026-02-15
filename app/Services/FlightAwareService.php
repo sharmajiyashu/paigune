@@ -105,33 +105,49 @@ class FlightAwareService
     /**
      * Search flights from origin → destination
      */
-    public function searchFlights(string $from, string $to, int $howMany = 15, int $offset = 0): array
+    public function searchFlights(string $from, string $to): array
     {
-        $cacheKey = "fa_flights_{$from}_to_{$to}_{$howMany}_{$offset}";
+        $cacheKey = "fa_flights_all_{$from}_to_{$to}";
 
-        return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($from, $to, $howMany, $offset) {
+        return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($from, $to) {
 
-            // GET request with API key in header
-            $response = Http::withHeaders([
-                'x-apikey' => $this->apiKey,
-                'Accept'   => 'application/json',
-            ])
-                ->get($this->baseUrl, [
-                    'origin'      => $from,
-                    'destination' => $to,
-                    'howMany'     => $howMany,
-                    'offset'      => $offset,
+            $endpoint = $this->baseUrl . '/flights/search';
+            $query = "-origin {$from} -destination {$to}";
+
+            $allFlights = [];
+            $nextUrl = null;
+
+            do {
+
+                $response = Http::withHeaders([
+                    'x-apikey' => $this->apiKey,
+                    'Accept'   => 'application/json',
+                ])->get($nextUrl ?? $endpoint, [
+                    'query' => $nextUrl ? null : $query,
+                    'max_pages' => 1,
                 ]);
 
-            if ($response->failed()) {
-                return [
-                    'error' => true,
-                    'status' => $response->status(),
-                    'message' => $response->body(),
-                ];
-            }
+                if ($response->failed()) {
+                    return [
+                        'error'   => true,
+                        'status'  => $response->status(),
+                        'message' => $response->body(),
+                    ];
+                }
 
-            return $response->json();
+                $data = $response->json();
+
+                if (isset($data['flights'])) {
+                    $allFlights = array_merge($allFlights, $data['flights']);
+                }
+
+                $nextUrl = $data['links']['next'] ?? null;
+            } while ($nextUrl);
+
+            return [
+                'total_flights' => count($allFlights),
+                'flights'       => $allFlights,
+            ];
         });
     }
 }
