@@ -48,6 +48,13 @@ class FlightAwareController extends Controller
         );
     }
 
+    public function flight(string $ident): JsonResponse
+    {
+        return response()->json(
+            $this->flightAware->getFlightDetail($ident)
+        );
+    }
+
     /**
      * Search flights from origin → destination
      */

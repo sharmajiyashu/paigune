@@ -9,6 +9,7 @@ use App\Http\Requests\StoreQuoteOtherRequest;
 use App\Http\Requests\StoreQuoteRequest;
 use App\Http\Requests\StoreQuoteTransportRequest;
 use App\Http\Requests\UpdateQuoteRequest;
+use App\Models\Airpot;
 use App\Models\Notification;
 use App\Models\Quote;
 use App\Models\QuoteFlight;
@@ -130,9 +131,12 @@ class QuoteController extends Controller
 
     public function flights($id)
     {
+        $airpots = Airpot::get();
         $quote = Quote::find($id);
         $flight = QuoteFlight::where('quote_id', $id)->first();
-        return view('admin.quotes.flights', compact('quote', 'flight'));
+
+        // return $airpots;
+        return view('admin.quotes.flights', compact('quote', 'flight','airpots'));
     }
 
     public function hotels($id)
@@ -169,6 +173,7 @@ class QuoteController extends Controller
             'other'
         ])->findOrFail($id);
 
+        // return $quote;
         return view('admin.quotes.show', compact('quote'));
     }
 

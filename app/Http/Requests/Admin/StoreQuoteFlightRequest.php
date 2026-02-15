@@ -22,6 +22,7 @@ class StoreQuoteFlightRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'flight_json'=> 'nullable',
             'quote_id' => 'required|exists:quotes,id',
             'type_of_booking' => 'required|in:one_way,return',
             'flight_number'   => 'nullable|string|max:100',

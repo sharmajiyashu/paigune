@@ -22,6 +22,8 @@ Route::prefix('flightaware')->group(function () {
 
     Route::get('/from-to/{from}/{to}', [FlightAwareController::class, 'fromTo']);
 
+    Route::get('/flight/{ident}', [FlightAwareController::class, 'flight']);
+
     Route::get('/sync-airports', [FlightAwareController::class, 'syncAirports']);
 
 });

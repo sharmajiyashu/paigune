@@ -10,7 +10,7 @@ class QuoteFlight extends Model
     use LogsActivity;
     protected $fillable = [
         'quote_id',
-
+        'flight_json',
         // Outbound Flight
         'type_of_booking',
         'flight_number',
@@ -37,4 +37,8 @@ class QuoteFlight extends Model
     {
         return $this->belongsTo(Quote::class);
     }
+
+    protected $casts = [
+        'flight_json' => 'array',
+    ];
 }

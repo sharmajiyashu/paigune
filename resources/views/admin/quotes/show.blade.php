@@ -37,21 +37,121 @@
 
                                     {{-- Flight --}}
                                     @if ($quote->flight)
+                                        @php
+                                            $flight = json_decode($quote->flight->flight_json, true);
+                                        @endphp
+
                                         <hr>
                                         <h5 class="text-success">✈ Flight Details</h5>
+
                                         <div class="row">
-                                            <div class="col-md-3"><b>Booking
-                                                    Type</b><br>{{ $quote->flight->type_of_booking }}</div>
-                                            <div class="col-md-3"><b>Flight No</b><br>{{ $quote->flight->flight_number }}
+
+                                            <div class="col-md-3">
+                                                <b>Booking Type</b><br>
+                                                {{ $quote->flight->type_of_booking }}
                                             </div>
-                                            <div class="col-md-3"><b>From</b><br>{{ $quote->flight->departure_airport }}
+
+                                            <div class="col-md-3">
+                                                <b>Flight No</b><br>
+                                                {{ $flight['ident_iata'] ?? $flight['ident'] }}
                                             </div>
-                                            <div class="col-md-3"><b>To</b><br>{{ $quote->flight->arrival_airport }}</div>
-                                            <div class="col-md-3 mt-2">
-                                                <b>Departure</b><br>{{ $quote->flight->departure_date }}
-                                                {{ $quote->flight->departure_time }}</div>
-                                            <div class="col-md-3 mt-2"><b>Arrival</b><br>{{ $quote->flight->arrival_time }}
+
+                                            <div class="col-md-3">
+                                                <b>Airline</b><br>
+                                                {{ $flight['operator_iata'] ?? '' }}
                                             </div>
+
+                                            <div class="col-md-3">
+                                                <b>Status</b><br>
+                                                <span
+                                                    class="badge
+                {{ $flight['status'] == 'Arrived'
+                    ? 'bg-success'
+                    : ($flight['status'] == 'Cancelled'
+                        ? 'bg-danger'
+                        : 'bg-primary') }}">
+                                                    {{ $flight['status'] ?? 'N/A' }}
+                                                </span>
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>From</b><br>
+                                                {{ $flight['origin']['city'] ?? '' }}
+                                                ({{ $flight['origin']['code_iata'] ?? '' }})
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>To</b><br>
+                                                {{ $flight['destination']['city'] ?? '' }}
+                                                ({{ $flight['destination']['code_iata'] ?? '' }})
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Departure</b><br>
+                                                {{ \Carbon\Carbon::parse($flight['scheduled_out'])->format('d M Y H:i') }}
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Arrival</b><br>
+                                                {{ \Carbon\Carbon::parse($flight['scheduled_in'])->format('d M Y H:i') }}
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Aircraft</b><br>
+                                                {{ $flight['aircraft_type'] ?? '' }}
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Registration</b><br>
+                                                {{ $flight['registration'] ?? 'N/A' }}
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Distance</b><br>
+                                                {{ $flight['route_distance'] ?? 0 }} NM
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Duration</b><br>
+                                                {{ gmdate('H:i', $flight['filed_ete'] ?? 0) }}
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Departure Delay</b><br>
+                                                {{ isset($flight['departure_delay']) ? round($flight['departure_delay'] / 60) : 0 }}
+                                                min
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Arrival Delay</b><br>
+                                                {{ isset($flight['arrival_delay']) ? round($flight['arrival_delay'] / 60) : 0 }}
+                                                min
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Terminal</b><br>
+                                                {{ $flight['terminal_origin'] ?? '-' }}
+                                                →
+                                                {{ $flight['terminal_destination'] ?? '-' }}
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Gate</b><br>
+                                                {{ $flight['gate_origin'] ?? '-' }}
+                                                →
+                                                {{ $flight['gate_destination'] ?? '-' }}
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Progress</b><br>
+                                                {{ $flight['progress_percent'] ?? 0 }}%
+                                            </div>
+
+                                            <div class="col-md-3 mt-3">
+                                                <b>Flight Type</b><br>
+                                                {{ $flight['type'] ?? '' }}
+                                            </div>
+
                                         </div>
                                     @endif
 
@@ -77,13 +177,15 @@
                                         <h5 class="text-info">🚗 Transport</h5>
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <b>Company</b><br>{{ $quote->transport->car_rental_company }}</div>
+                                                <b>Company</b><br>{{ $quote->transport->car_rental_company }}
+                                            </div>
                                             <div class="col-md-3"><b>Car Type</b><br>{{ $quote->transport->car_type }}
                                             </div>
                                             <div class="col-md-3"><b>Pickup</b><br>{{ $quote->transport->pickup_location }}
                                             </div>
                                             <div class="col-md-3">
-                                                <b>Dropoff</b><br>{{ $quote->transport->dropoff_location }}</div>
+                                                <b>Dropoff</b><br>{{ $quote->transport->dropoff_location }}
+                                            </div>
                                         </div>
                                     @endif
 

@@ -102,6 +102,25 @@ class FlightAwareService
         });
     }
 
+    public function getFlightDetail(string $ident)
+    {
+        return Cache::remember("fa_flight_$ident", now()->addMinutes(30), function () use ($ident) {
+
+            $response = Http::withHeaders([
+                'x-apikey' => env('FLIGHTAWARE_API_KEY'),
+                'Accept' => 'application/json'
+            ])->get("https://aeroapi.flightaware.com/aeroapi/flights/$ident");
+
+            if ($response->failed()) {
+                return response()->json([
+                    'error' => 'Unable to fetch flight details'
+                ], 500);
+            }
+
+            return $response->json();
+        });
+    }
+
     /**
      * Search flights from origin → destination
      */
