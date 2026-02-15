@@ -31,4 +31,9 @@ class Airpot extends Model
         'airport_flights_url',
         'alternatives',
     ];
+
+
+    protected $casts = [
+        'alternatives' => 'array',
+    ];
 }

@@ -21,9 +21,76 @@
                 </div>
 
                 <div class="col-md-3 text-end">
+
+                    <a href="#" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#importExportAirpot">Import/Export</a>
+
                     <a href="{{ route('admin.airpots.create') }}" class="btn btn-primary">Create</a>
                 </div>
             </div>
+
+            <div class="modal fade" id="importExportAirpot" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        {{-- Modal Header --}}
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import / Export Airports</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        {{-- Modal Body --}}
+                        <div class="modal-body">
+
+                            {{-- Success Message --}}
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            {{-- Import Form --}}
+                            <form action="{{ route('admin.airpotsExport.import') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+
+                                <div class="mb-3">
+                                    <label class="form-label">Upload CSV File</label>
+                                    <input type="file" name="file" class="form-control" accept=".csv" required>
+                                    @error('file')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-upload"></i> Import CSV
+                                    </button>
+                                </div>
+                            </form>
+
+                            <hr class="my-4">
+
+                            {{-- Export Section --}}
+                            <div class="text-center">
+                                <p class="mb-2">Download all airport records as CSV file.</p>
+                                <a href="{{ route('admin.airpotsExport.export') }}" class="btn btn-success">
+                                    <i class="bi bi-download"></i> Export CSV
+                                </a>
+                            </div>
+
+                        </div>
+
+                        {{-- Modal Footer --}}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
 
             <div class="content-body">
                 <section id="ajax-datatable">

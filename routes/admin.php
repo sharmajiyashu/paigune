@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\{
     QuoteController,
     TripController
 };
+use App\Http\Controllers\AirpotCsvController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,14 +48,17 @@ Route::middleware(['isAdmin'])
             'trips'        => TripController::class,
         ]);
 
-        Route::get('quotes/flights/{id}',[QuoteController::class,'flights'])->name('quotes.flights');
-        Route::get('quotes/hotels/{id}',[QuoteController::class,'hotels'])->name('quotes.hotels');
-        Route::get('quotes/transports/{id}',[QuoteController::class,'transports'])->name('quotes.transports');
-        Route::get('quotes/others/{id}',[QuoteController::class,'others'])->name('quotes.others');
+        Route::get('airpotsExport/export', [AirpotCsvController::class, 'export'])->name('airpotsExport.export');
+        Route::post('airpotsExport/import', [AirpotCsvController::class, 'import'])->name('airpotsExport.import');
+
+        Route::get('quotes/flights/{id}', [QuoteController::class, 'flights'])->name('quotes.flights');
+        Route::get('quotes/hotels/{id}', [QuoteController::class, 'hotels'])->name('quotes.hotels');
+        Route::get('quotes/transports/{id}', [QuoteController::class, 'transports'])->name('quotes.transports');
+        Route::get('quotes/others/{id}', [QuoteController::class, 'others'])->name('quotes.others');
 
 
-        Route::post('quotes/flights/update',[QuoteController::class,'flightUpdate'])->name('quotes.flights.store');
-        Route::post('quotes/hotels/update',[QuoteController::class,'hotelUpdate'])->name('quotes.hotels.store');
-        Route::post('quotes/trsanports/update',[QuoteController::class,'transportUpdate'])->name('quotes.trsanports.store');
-        Route::post('quotes/others/update',[QuoteController::class,'otherUpdate'])->name('quotes.others.store');
+        Route::post('quotes/flights/update', [QuoteController::class, 'flightUpdate'])->name('quotes.flights.store');
+        Route::post('quotes/hotels/update', [QuoteController::class, 'hotelUpdate'])->name('quotes.hotels.store');
+        Route::post('quotes/trsanports/update', [QuoteController::class, 'transportUpdate'])->name('quotes.trsanports.store');
+        Route::post('quotes/others/update', [QuoteController::class, 'otherUpdate'])->name('quotes.others.store');
     });
