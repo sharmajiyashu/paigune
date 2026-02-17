@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FlightController;
+use App\Http\Controllers\Api\QuoteController;
+use App\Http\Controllers\Api\TripController;
 use App\Models\User;
 use Illuminate\Support\Facades\Request;
 
@@ -33,6 +35,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/departures/{icao}',[FlightController::class,'departures']);
     Route::get('/from-to/{from}/{to}', [FlightController::class, 'fromTo']);
     Route::get('/search-by-flightnumber-date',[FlightController::class,'searchByFlightAndDate']);
+
+
+    Route::get('quotes',[QuoteController::class,'getData']);
+    Route::get('quotes/{id}',[QuoteController::class,'getDetail']);
+    Route::delete('quotes/{id}',[QuoteController::class,'delete']);
+
+    Route::post('quotes/change-status/{id}',[QuoteController::class,'changeStatus']);
+
+    Route::get('trips',[TripController::class,'trips']);
+
 
 
 });
