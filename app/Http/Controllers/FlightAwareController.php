@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Airpot;
 use App\Services\FlightAwareService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class FlightAwareController extends Controller
 {
@@ -131,6 +132,50 @@ class FlightAwareController extends Controller
         return response()->json([
             'success' => true,
             'saved_airports' => $savedCount,
+        ]);
+    }
+
+
+   public function searchByFlightAndDate(Request $request)
+    {
+        $request->validate([
+            'flight_number' => 'required|string',
+            'departure_date' => 'required|date',
+        ]);
+
+        $flightNumber = $request->flight_number;
+        $departureDate = $request->departure_date; // e.g., "2026-02-19"
+
+        // Call FlightAware API
+        $result = $this->flightAware->getFlightDetail($flightNumber);
+
+        if (!isset($result['flight']) && !isset($result['flights'])) {
+            return response()->json([
+                'flight' => null,
+                'error' => $result['error'] ?? 'No flight data returned'
+            ]);
+        }
+
+        $flights = $result['flights'] ?? [$result['flight']];
+
+        // Filter by departure_date (scheduled_out)
+        $filtered = array_filter($flights, function ($flight) use ($departureDate) {
+            $flightDate = substr($flight['scheduled_out'], 0, 10); // "YYYY-MM-DD"
+            return $flightDate === $departureDate;
+        });
+
+        if (empty($filtered)) {
+            return response()->json([
+                'flight' => null,
+                'error' => 'No flight found for this date'
+            ]);
+        }
+
+        // Take the first matching flight
+        $flight = array_values($filtered)[0];
+
+        return response()->json([
+            'flight' => $flight
         ]);
     }
 }

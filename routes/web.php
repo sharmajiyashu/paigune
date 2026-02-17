@@ -26,4 +26,6 @@ Route::prefix('flightaware')->group(function () {
 
     Route::get('/sync-airports', [FlightAwareController::class, 'syncAirports']);
 
+    Route::get('/search-by-flightnumber-date',[FlightAwareController::class,'searchByFlightAndDate']);
+
 });

@@ -41,6 +41,55 @@ class FlightAwareService
      * Get info about an airport by ICAO/IATA code
      */
 
+
+
+    public function searchByFlightAndDate(string $flightNumber, string $date): array
+{
+    // Correct endpoint: include flight number in URL
+    $url = rtrim($this->baseUrl, '/') . '/flights/' . $flightNumber;
+
+    try {
+        $response = Http::withHeaders([
+            'x-apikey' => $this->apiKey,
+        ])->get($url, [
+            'scheduled_departure' => $date,
+            'max_pages' => 1
+        ]);
+
+        // Handle HTTP errors
+        if ($response->failed()) {
+            return [
+                'flight' => null,
+                'error' => 'API request failed: ' . $response->body(),
+            ];
+        }
+
+        $data = $response->json();
+
+        // Some endpoints return flights as 'flights' key, normalize it
+        $flight = $data['flights'][0] ?? null;
+
+        if (!$flight) {
+            return [
+                'flight' => null,
+                'error' => 'No flight data found for this number and date',
+            ];
+        }
+
+        return [
+            'flight' => $flight
+        ];
+
+    } catch (\Exception $e) {
+        return [
+            'flight' => null,
+            'error' => 'Exception: ' . $e->getMessage(),
+        ];
+    }
+}
+
+
+
     public function getAllAirports(): array
     {
         return Cache::remember('fa_all_airports', now()->addMinutes(30), function () {
