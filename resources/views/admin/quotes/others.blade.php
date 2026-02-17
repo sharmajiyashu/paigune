@@ -48,40 +48,7 @@
             </div>
             <div class="content-body">
 
-                <ul class="nav nav-pills mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link " href="#">
-                            <i class="bi bi-person font-medium-3 me-50"></i>
-                            <span class="fw-bold">Basic</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="#">
-                            <i class="bi bi-airplane-engines font-medium-3 me-50"></i>
-                            <span class="fw-bold">Flight Detail</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="#">
-                            <i class="bi bi-building font-medium-3 me-50"></i>
-                            <span class="fw-bold">Hotel Detail</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-truck font-medium-3 me-50"></i>
-                            <span class="fw-bold">Transport Detail</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <i class="bi bi-file-text font-medium-3 me-50"></i>
-                            <span class="fw-bold">Other Detail</span>
-                        </a>
-                    </li>
-                </ul>
-
-
+                @include('admin.quotes.tabs', ['quote' => $quote ?? null])
 
 
                 <!-- Basic multiple Column Form section start -->
@@ -132,8 +99,8 @@
                                                 <div class="mb-1">
                                                     <label class="form-label" for="date">Date <span
                                                             class="error"></span></label>
-                                                    <input type="date" id="date" name="date"
-                                                        class="form-control" value="{{ $other->date ?? '' }}" />
+                                                    <input type="date" id="date" name="date" class="form-control"
+                                                        value="{{ $other->date ?? '' }}" />
                                                     <span class="text-danger validation-class"
                                                         id="date-submit_errors"></span>
                                                 </div>
@@ -143,8 +110,8 @@
                                                 <div class="mb-1">
                                                     <label class="form-label" for="time">Time <span
                                                             class="error"></span></label>
-                                                    <input type="time" id="time" name="time"
-                                                        class="form-control" value="{{ $other->time ?? '' }}" />
+                                                    <input type="time" id="time" name="time" class="form-control"
+                                                        value="{{ $other->time ?? '' }}" />
                                                     <span class="text-danger validation-class"
                                                         id="time-submit_errors"></span>
                                                 </div>

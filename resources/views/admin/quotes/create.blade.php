@@ -48,41 +48,7 @@
             </div>
             <div class="content-body">
 
-                <ul class="nav nav-pills mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <i class="bi bi-person font-medium-3 me-50"></i>
-                            <span class="fw-bold">Basic</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="#">
-                            <i class="bi bi-airplane-engines font-medium-3 me-50"></i>
-                            <span class="fw-bold">Flight Detail</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-building font-medium-3 me-50"></i>
-                            <span class="fw-bold">Hotel Detail</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-truck font-medium-3 me-50"></i>
-                            <span class="fw-bold">Transport Detail</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-file-text font-medium-3 me-50"></i>
-                            <span class="fw-bold">Other Detail</span>
-                        </a>
-                    </li>
-                </ul>
-
-
-
+                @include('admin.quotes.tabs', ['quote' => $quote ?? null])
 
                 <!-- Basic multiple Column Form section start -->
                 <section id="multiple-column-form">
@@ -131,9 +97,9 @@
                                             <div class="mb-1">
                                                 <label class="form-label" for="reference_number">Reference Number <span
                                                         class="error"></span></label>
-                                                <input type="text" id="reference_number" name="reference_number"
+                                                <input type="text" id="reference_number" name="reference_number" readonly
                                                     class="form-control" placeholder="Reference Number"
-                                                    value="{{ $quote->reference_number ?? '' }}" />
+                                                    value="{{ $quote->reference_number ?? $quoteNumber }}" />
                                                 <span class="text-danger validation-class"
                                                     id="reference_number-submit_errors"></span>
                                             </div>
@@ -153,7 +119,7 @@
                                         </div>
 
                                         {{-- Total Price --}}
-                                        <div class="col-md-6 col-12">
+                                        {{-- <div class="col-md-6 col-12">
                                             <div class="mb-1">
                                                 <label class="form-label" for="total_price">Total Price <span
                                                         class="error"></span></label>
@@ -163,7 +129,7 @@
                                                 <span class="text-danger validation-class"
                                                     id="total_price-submit_errors"></span>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         {{-- Notes --}}
                                         <div class="col-12">

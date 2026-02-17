@@ -19,6 +19,7 @@ use App\Models\QuoteTransport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class QuoteController extends Controller
 {
@@ -63,7 +64,11 @@ class QuoteController extends Controller
     public function create()
     {
         $clients = User::where('role', User::$client)->get();
-        return view('admin.quotes.create', compact('clients'));
+        // Generate unique 6 digit number
+        do {
+            $quoteNumber = strtoupper(Str::random(6));
+        } while (Quote::where('reference_number', $quoteNumber)->exists());
+        return view('admin.quotes.create', compact('clients','quoteNumber'));
     }
 
     /**
@@ -136,7 +141,7 @@ class QuoteController extends Controller
         $flight = QuoteFlight::where('quote_id', $id)->first();
 
         // return $airpots;
-        return view('admin.quotes.flights', compact('quote', 'flight','airpots'));
+        return view('admin.quotes.flights', compact('quote', 'flight', 'airpots'));
     }
 
     public function hotels($id)
