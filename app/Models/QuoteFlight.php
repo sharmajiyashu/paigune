@@ -11,8 +11,12 @@ class QuoteFlight extends Model
     protected $fillable = [
         'quote_id',
         'flight_json',
-        // Outbound Flight
+
+        // Booking Info
         'type_of_booking',
+        'type_of_flight',
+
+        // Outbound Flight
         'flight_number',
         'airline_operator',
         'aircraft_type',
@@ -23,7 +27,13 @@ class QuoteFlight extends Model
         'arrival_time',
 
         // Return Flight
+        'return_flight_number',
+        'return_airline_operator',
+        'return_aircraft_type',
+        'return_departure_date',
         'return_arrival_date',
+        'return_departure_airport',
+        'return_arrival_airport',
         'return_departure_time',
         'return_arrival_time',
 
