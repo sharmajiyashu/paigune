@@ -68,7 +68,7 @@ class QuoteController extends Controller
         do {
             $quoteNumber = strtoupper(Str::random(6));
         } while (Quote::where('reference_number', $quoteNumber)->exists());
-        return view('admin.quotes.create', compact('clients','quoteNumber'));
+        return view('admin.quotes.create', compact('clients', 'quoteNumber'));
     }
 
     /**
@@ -89,7 +89,7 @@ class QuoteController extends Controller
             'reference_id' => $quote->id
         ]);
 
-
+        $this->updateQuoteTotal($quote->idate); // 👈 ADD THIS
         session()->flash('success', 'Quote Basic Detail Save');
         return route('admin.quotes.flights', $quote->id);
     }
@@ -101,6 +101,7 @@ class QuoteController extends Controller
             $request->validated()      // data to insert/update
         );
         session()->flash('success', 'Quote Flight Detail Save');
+        $this->updateQuoteTotal($request->quote_id); // 👈 ADD THIS
         return route('admin.quotes.hotels', $request->quote_id);
     }
 
@@ -111,6 +112,7 @@ class QuoteController extends Controller
             $request->validated()      // data to insert/update
         );
         session()->flash('success', 'Quote Hotel Detail Save');
+        $this->updateQuoteTotal($request->quote_id); // 👈 ADD THIS
         return route('admin.quotes.transports', $request->quote_id);
     }
 
@@ -120,6 +122,7 @@ class QuoteController extends Controller
             ['quote_id' => $request->quote_id],   // where condition
             $request->validated()      // data to insert/update
         );
+        $this->updateQuoteTotal($request->quote_id); // 👈 ADD THIS
         session()->flash('success', 'Quote Transport Detail Save');
         return route('admin.quotes.others', $request->quote_id);
     }
@@ -130,6 +133,7 @@ class QuoteController extends Controller
             ['quote_id' => $request->quote_id],   // where condition
             $request->validated()      // data to insert/update
         );
+        $this->updateQuoteTotal($request->quote_id); // 👈 ADD THIS
         session()->flash('success', 'Quote Other Detail Save');
         return route('admin.quotes.show', $request->quote_id);
     }
@@ -199,6 +203,7 @@ class QuoteController extends Controller
     {
         Quote::where('id', $id)->update($request->validated());
         session()->flash('success', 'Quote Basic Detail Save');
+        $this->updateQuoteTotal($id); // 👈 ADD THIS
         return route('admin.quotes.flights', $id);
     }
 
@@ -208,5 +213,36 @@ class QuoteController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    private function updateQuoteTotal($quoteId)
+    {
+        $flight    = QuoteFlight::where('quote_id', $quoteId)->first();
+        $hotel     = QuoteHotel::where('quote_id', $quoteId)->first();
+        $transport = QuoteTransport::where('quote_id', $quoteId)->first();
+        $other     = QuoteOther::where('quote_id', $quoteId)->first();
+
+        $total = 0;
+
+        if ($flight) {
+            $total += $flight->price ?? 0;
+        }
+
+        if ($hotel) {
+            $total += $hotel->price ?? 0;
+        }
+
+        if ($transport) {
+            $total += $transport->price ?? 0;
+        }
+
+        if ($other) {
+            $total += $other->price ?? 0;
+        }
+
+        Quote::where('id', $quoteId)->update([
+            'total_price' => $total
+        ]);
     }
 }

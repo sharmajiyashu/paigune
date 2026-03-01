@@ -106,7 +106,7 @@
                                         </div>
 
                                         {{-- Internal Ref --}}
-                                        <div class="col-md-6 col-12">
+                                        {{-- <div class="col-md-6 col-12">
                                             <div class="mb-1">
                                                 <label class="form-label" for="internal_ref">Internal Ref <span
                                                         class="error"></span></label>
@@ -116,7 +116,7 @@
                                                 <span class="text-danger validation-class"
                                                     id="internal_ref-submit_errors"></span>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         {{-- Total Price --}}
                                         {{-- <div class="col-md-6 col-12">
@@ -137,8 +137,7 @@
                                                 <label class="form-label" for="notes">Notes <span
                                                         class="error"></span></label>
                                                 <textarea id="notes" name="notes" class="form-control" placeholder="Notes">{{ $quote->notes ?? '' }}</textarea>
-                                                <span class="text-danger validation-class"
-                                                    id="notes-submit_errors"></span>
+                                                <span class="text-danger validation-class" id="notes-submit_errors"></span>
                                             </div>
                                         </div>
 

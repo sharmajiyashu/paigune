@@ -52,7 +52,6 @@
                                                 <th>#</th>
                                                 <th>Client</th>
                                                 <th>Reference</th>
-                                                <th>Internal Ref</th>
                                                 <th>Total Price</th>
                                                 <th>Status</th>
                                                 <th>Created By</th>
@@ -70,7 +69,6 @@
                                                         <small class="text-muted">{{ $item->client->email ?? '' }}</small>
                                                     </td>
                                                     <td>{{ $item->reference_number }}</td>
-                                                    <td>{{ $item->internal_ref }}</td>
                                                     <td>₹ {{ number_format($item->total_price, 2) }}</td>
                                                     <td>
                                                         @if ($item->status === 'pending')

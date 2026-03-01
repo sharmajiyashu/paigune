@@ -130,7 +130,7 @@
 
 
                                             <div class="col-12">
-                                                <button type="submit" class="btn btn-primary me-1">Next</button>
+                                                <button type="submit" class="btn btn-primary me-1">Submit</button>
                                                 <a href="{{ route('admin.quotes.transports', $quote->id) }}"
                                                     class="btn btn-outline-secondary">Back</a>
                                             </div>
@@ -202,7 +202,8 @@
                         $('.spinner-loader').css('display', 'block');
                     },
                     success: function(res) {
-                        window.location.href = res;
+                        // window.location.href = res;
+                        window.location.reload();
                         $('#form-loader').hide();
                     },
                     error: function(res) {
